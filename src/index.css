@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+:root {
+  /* Daxx Brand Colors */
+  --daxx-green: #006838;
+  --daxx-blue: #004B87;
+  --daxx-cyan: #009CDE;
+}
+
+@theme inline {
+  --color-daxx-green: var(--daxx-green);
+  --color-daxx-blue: var(--daxx-blue);
+  --color-daxx-cyan: var(--daxx-cyan);
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #F8FAFC;
+  color: #1E293B;
+}
+
+/* Print Styles for Daxx COA Generator */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide all interactive UI elements, sidebars, headers, and navigation drawers */
+  aside,
+  header,
+  .no-print,
+  .md\:hidden, /* Hide mobile navbar and mobile navigation drawers */
+  button,
+  input,
+  select,
+  textarea,
+  .modal-header,
+  .modal-sidebar,
+  .sidebar,
+  .nav-tabs {
+    display: none !important;
+  }
+
+  /* Reset layout and backgrounds for the print page */
+  body, html, #root, main, .main-layout, .tab-content {
+    background: white !important;
+    color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Target specifically the print-coa-container to occupy the full page */
+  .print-coa-container {
+    display: block !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 1.0cm 1.2cm !important; /* Margins are handled internally to hide browser default headers and footers */
+    border: none !important;
+    box-shadow: none !important;
+    background: white !important;
+    color: black !important;
+    box-sizing: border-box;
+  }
+
+  @page {
+    size: A4;
+    margin: 0; /* Set print margins to 0 to hide browser URL, date, page titles, and numbers */
+  }
+}
