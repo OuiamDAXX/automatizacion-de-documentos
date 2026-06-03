@@ -38,6 +38,7 @@ export default function Comparator({ products, selectedProductId, onSelectProduc
   const [comparisonResults, setComparisonResults] = useState<ComparisonResult[] | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [copyCoaSuccess, setCopyCoaSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Phase 2 states
@@ -206,6 +207,64 @@ export default function Comparator({ products, selectedProductId, onSelectProduc
       navigator.clipboard.writeText(plainText).then(() => {
         setCopySuccess(true);
         setTimeout(() => setCopySuccess(false), 2000);
+      });
+    }
+  };
+
+  const handleCopyCoaToClipboard = () => {
+    if (!coaResults) return;
+    
+    // 1. Plain text TSV format
+    let plainText = `Description\tUnits\tSpecification\tResult\n`;
+    coaResults.forEach(res => {
+      plainText += `${res.name}\t${res.unit || ''}\t${res.limitText}\t${res.value || ''}\n`;
+    });
+
+    // 2. Rich HTML table format
+    let htmlText = `<table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse; border: 2px solid #144b91; font-family: Arial, sans-serif; font-size: 11pt; color: black; width: 100%; max-w: 650px;">`;
+    htmlText += `<thead>`;
+    htmlText += `<tr style="border-bottom: 3px solid #144b91; font-weight: bold; background-color: #f8fafc;">`;
+    htmlText += `<th style="border: 2px solid #144b91; padding: 8px; text-align: left; width: 40%;">Description</th>`;
+    htmlText += `<th style="border: 2px solid #144b91; padding: 8px; text-align: center; width: 15%;">Units</th>`;
+    htmlText += `<th style="border: 2px solid #144b91; padding: 8px; text-align: right; width: 22%;">Specification</th>`;
+    htmlText += `<th style="border: 2px solid #144b91; padding: 8px; text-align: right; width: 23%;">Result</th>`;
+    htmlText += `</tr>`;
+    htmlText += `</thead>`;
+    htmlText += `<tbody>`;
+
+    coaResults.forEach(res => {
+      htmlText += `<tr>`;
+      htmlText += `<td style="border: 2px solid #144b91; padding: 6px; text-align: left;">${res.name}</td>`;
+      htmlText += `<td style="border: 2px solid #144b91; padding: 6px; text-align: center; font-style: italic;">${res.unit || ''}</td>`;
+      htmlText += `<td style="border: 2px solid #144b91; padding: 6px; text-align: right;">${res.limitText}</td>`;
+      htmlText += `<td style="border: 2px solid #144b91; padding: 6px; text-align: right; font-weight: bold;">${res.value || ''}</td>`;
+      htmlText += `</tr>`;
+    });
+
+    htmlText += `</tbody>`;
+    htmlText += `</table>`;
+
+    if (navigator.clipboard && window.ClipboardItem) {
+      const plainBlob = new Blob([plainText], { type: 'text/plain' });
+      const htmlBlob = new Blob([htmlText], { type: 'text/html' });
+      const item = new ClipboardItem({
+        'text/plain': plainBlob,
+        'text/html': htmlBlob
+      });
+      navigator.clipboard.write([item]).then(() => {
+        setCopyCoaSuccess(true);
+        setTimeout(() => setCopyCoaSuccess(false), 2000);
+      }).catch(err => {
+        console.error('Failed rich copy of COA: ', err);
+        navigator.clipboard.writeText(plainText).then(() => {
+          setCopyCoaSuccess(true);
+          setTimeout(() => setCopyCoaSuccess(false), 2000);
+        });
+      });
+    } else {
+      navigator.clipboard.writeText(plainText).then(() => {
+        setCopyCoaSuccess(true);
+        setTimeout(() => setCopyCoaSuccess(false), 2000);
       });
     }
   };
@@ -993,9 +1052,20 @@ export default function Comparator({ products, selectedProductId, onSelectProduc
                 <div className="pt-4 border-t border-slate-200 flex justify-end gap-3 no-print bg-white">
                   <button
                     onClick={() => setShowCoaModal(false)}
-                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-650 font-bold border border-slate-205 rounded-lg transition-all text-sm cursor-pointer shadow-3xs"
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-205 text-slate-650 font-bold border border-slate-205 rounded-lg transition-all text-sm cursor-pointer shadow-3xs"
                   >
                     Cancel
+                  </button>
+                  <button
+                    onClick={handleCopyCoaToClipboard}
+                    className={`px-5 py-2 font-bold rounded-lg border transition-all text-sm flex items-center gap-2 cursor-pointer shadow-3xs ${
+                      copyCoaSuccess 
+                        ? 'bg-emerald-55 border-emerald-250 text-emerald-700' 
+                        : 'bg-white hover:bg-slate-50 border-slate-250 text-slate-700'
+                    }`}
+                  >
+                    {copyCoaSuccess ? <Check size={14} /> : <Copy size={14} />}
+                    {copyCoaSuccess ? 'Copied!' : 'Copy COA Table'}
                   </button>
                   <button
                     onClick={handlePrint}
