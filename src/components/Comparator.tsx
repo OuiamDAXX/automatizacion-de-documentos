@@ -1014,7 +1014,7 @@ export default function Comparator({ products, selectedProductId, onSelectProduc
                   <div>
                     {/* Header Image */}
                     <div className="w-full mb-6">
-                      <img src="/image1.jpg" alt="Daxx Logo Header" className="w-full h-auto" />
+                      <img src={`${import.meta.env.BASE_URL}image1.jpg`} alt="Daxx Logo Header" className="w-full h-auto" />
                     </div>
 
                     {/* Header */}
@@ -1100,7 +1100,7 @@ export default function Comparator({ products, selectedProductId, onSelectProduc
 
                     {/* Footer Image */}
                     <div className="w-full">
-                      <img src="/image2.jpg" alt="Daxx Footer" className="w-full h-auto" />
+                      <img src={`${import.meta.env.BASE_URL}image2.jpg`} alt="Daxx Footer" className="w-full h-auto" />
                     </div>
                   </div>
 
@@ -1119,7 +1119,7 @@ export default function Comparator({ products, selectedProductId, onSelectProduc
             <div>
               {/* Header Image */}
               <div className="w-full mb-6">
-                <img src="/image1.jpg" alt="Daxx Logo Header" className="w-full h-auto" />
+                <img src={`${import.meta.env.BASE_URL}image1.jpg`} alt="Daxx Logo Header" className="w-full h-auto" />
               </div>
 
               {/* Header */}
@@ -1205,7 +1205,7 @@ export default function Comparator({ products, selectedProductId, onSelectProduc
 
               {/* Footer Image */}
               <div className="w-full">
-                <img src="/image2.jpg" alt="Daxx Footer" className="w-full h-auto" />
+                <img src={`${import.meta.env.BASE_URL}image2.jpg`} alt="Daxx Footer" className="w-full h-auto" />
               </div>
             </div>
 
