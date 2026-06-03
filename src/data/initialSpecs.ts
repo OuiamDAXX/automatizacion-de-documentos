@@ -7048,6 +7048,112 @@ export const INITIAL_PRODUCTS: ProductSpec[] = [
     "category": "Others",
     "specs": [
       {
+        "id": "d40-density-15c",
+        "name": "Density @ 15°C",
+        "unit": "kg/l",
+        "value": "0.770 - 0.810",
+        "limitType": "range",
+        "synonyms": [
+          "density @ 15°c",
+          "densidad a 15°c",
+          "densidad 15°c",
+          "densidad a 15c",
+          "density at 15°c",
+          "densidad 15c",
+          "densidad 15°c astm d",
+          "densidad 15"
+        ]
+      },
+      {
+        "id": "d40-aromatics",
+        "name": "Aromatics",
+        "unit": "ppm",
+        "value": 300,
+        "limitType": "max",
+        "synonyms": [
+          "aromatics",
+          "contenido de aromáticos",
+          "aromaticos",
+          "contenido de aromaticos"
+        ]
+      },
+      {
+        "id": "d40-benzene",
+        "name": "Benzene",
+        "unit": "ppm",
+        "value": 1,
+        "limitType": "max",
+        "synonyms": [
+          "benzene",
+          "benceno"
+        ]
+      },
+      {
+        "id": "d40-flash-pmcc",
+        "name": "Flash Point (Pensky Martens)",
+        "unit": "°C",
+        "value": 41,
+        "limitType": "min",
+        "synonyms": [
+          "flash point (pensky martens)",
+          "flash point pmcc",
+          "flash point pensky martens",
+          "infam. p/m (proc.a)",
+          "infam"
+        ]
+      },
+      {
+        "id": "d40-kb-value",
+        "name": "Kauri-Butanol Value",
+        "unit": "Visual",
+        "value": "30 - 38",
+        "limitType": "range",
+        "synonyms": [
+          "kauri-butanol value",
+          "indice kauri-butanol",
+          "kauri butanol",
+          "kb value"
+        ]
+      },
+      {
+        "id": "d40-sulfur",
+        "name": "Sulfur",
+        "unit": "ppm",
+        "value": 2,
+        "limitType": "max",
+        "synonyms": [
+          "sulfur",
+          "azufre",
+          "sulfur content"
+        ]
+      },
+      {
+        "id": "d40-bromine-index",
+        "name": "Bromine Index",
+        "unit": "mg Br/100g",
+        "value": 30,
+        "limitType": "max",
+        "synonyms": [
+          "bromine index",
+          "indice de bromo",
+          "brome index"
+        ]
+      },
+      {
+        "id": "d40-water-eu",
+        "name": "Water (Karl Fischer)",
+        "unit": "ppm",
+        "value": 100,
+        "limitType": "max",
+        "synonyms": [
+          "agua karl fischer",
+          "water (karl fischer)",
+          "water (kf)",
+          "agua (kf)",
+          "karl fischer water"
+        ]
+      },
+      {
         "id": "d40-api-gravity-70f",
         "name": "API Gravity @70F",
         "unit": "Visual",
