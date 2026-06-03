@@ -162,6 +162,8 @@ export function extractNumericValueFromLine(line: string, defaultUnit: string): 
     if (!unit) {
       if (/\bppm\b/i.test(line)) unit = 'ppm';
       else if (/%/i.test(line)) unit = 'wt%';
+      else if (/[°º]c\b|celsius/i.test(line)) unit = '°c';
+      else if (/[°º]f\b|fahrenheit/i.test(line)) unit = '°f';
       else unit = defaultUnit;
     }
     if (unit === '%') unit = 'wt%';
@@ -194,7 +196,7 @@ export function extractNumericValueFromLine(line: string, defaultUnit: string): 
     }
 
     // Prefer values appearing later on the line (standard column layout has results on the right)
-    score += (m.startIndex / line.length) * 2;
+    score += (m.startIndex / line.length) * 30;
 
     return { match: m, score };
   });
@@ -206,6 +208,8 @@ export function extractNumericValueFromLine(line: string, defaultUnit: string): 
   if (!unit) {
     if (/\bppm\b/i.test(line)) unit = 'ppm';
     else if (/%/i.test(line)) unit = 'wt%';
+    else if (/[°º]c\b|celsius/i.test(line)) unit = '°c';
+    else if (/[°º]f\b|fahrenheit/i.test(line)) unit = '°f';
     else unit = defaultUnit;
   }
   if (unit === '%') unit = 'wt%';
@@ -213,17 +217,17 @@ export function extractNumericValueFromLine(line: string, defaultUnit: string): 
   return { value: best.value, unit };
 }
 
+// Method pattern definitions for stripping method names/numbers from text
+const methodRegex = /\s+\b(?:dax|dowm|astm|din|iso|sms|uop|en|aocs|gc|hplc|method|méthode)\b\s+[a-z0-9\-\/._+]+(?:\s+[a-z0-9\-\/._+]+)*\s*$/i;
+const globalMethodRegex = /\b(?:astm(?:\s*d)?|uop|din|iso|en|gc|hplc|dowm|sms|aocs)\b(?:\s*\d+[a-z0-9\-\/._+]*)?/gi;
+const methodNumbersRegex = /\b(?:5453|2710|6045|495|481|86|93|4052|1133|6229)\b|(?<=\d)(?:5453|2710|6045|4052|1133|6229)\b/gi;
+
 /**
  * Parses the extracted text to match the specifications of a Daxx product.
  */
 export function parseSupplierCoaText(text: string, daxxSpecs: SpecItem[]): Record<string, ParsedSupplierSpec> {
   const results: Record<string, ParsedSupplierSpec> = {};
   const lines = text.split('\n').map(line => normalizeDashes(line.trim())).filter(line => line.length > 0);
-
-  // Method pattern to strip from the end of the line
-  const methodRegex = /\s+\b(?:dax|dowm|astm|din|iso|sms|uop|en|aocs|gc|hplc|method|méthode)\b\s+[a-z0-9\-\/._+]+(?:\s+[a-z0-9\-\/._+]+)*\s*$/i;
-  const globalMethodRegex = /\b(?:astm(?:\s*d)?|uop|din|iso|en|gc|hplc|dowm|sms|aocs)\b(?:\s*\d+[a-z0-9\-\/._+]*)?/gi;
-  const methodNumbersRegex = /\b(?:5453|2710|6045|495|481|86|93|4052)\b|(?<=\d)(?:5453|2710|6045|4052)\b/gi;
 
   for (const spec of daxxSpecs) {
     let bestLine = '';
@@ -313,7 +317,8 @@ export function parseSupplierCoaText(text: string, daxxSpecs: SpecItem[]): Recor
 
       if (spec.limitType === 'text' || spec.limitType === 'range') {
         const rangeRegex = /([\d.,]+)\s*[-–—]\s*([\d.,\-]+)/;
-        const rangeMatch = textToAnalyze.match(rangeRegex);
+        const spaceRangeRegex = /\b([\d.,]+)\s+([\d.,]+)\s*$/;
+        const rangeMatch = textToAnalyze.match(rangeRegex) || textToAnalyze.match(spaceRangeRegex);
         if (rangeMatch) {
           const rangeStr = `${rangeMatch[1].replace(',', '.')} - ${rangeMatch[2].replace(',', '.')}`;
           results[spec.id] = {
@@ -356,9 +361,13 @@ export function parseSupplierCoaText(text: string, daxxSpecs: SpecItem[]): Recor
  */
 export function convertUnits(val: number, fromUnit: string, toUnit: string): { value: number; unit: string } {
   const normalize = (u: string) => {
-    const l = u.toLowerCase();
-    if (l.includes('%') || l.includes('percent')) return '%peso';
+    const l = u.toLowerCase().trim();
+    if (l.includes('%') || l.includes('percent') || l.includes('peso') || l.includes('(m/m)')) return '%peso';
     if (l.includes('ppm')) return 'ppm';
+    if (l.includes('°c') || l.includes('ºc') || l === 'c' || l.includes('celsius')) return '°c';
+    if (l.includes('°f') || l.includes('ºf') || l === 'f' || l.includes('fahrenheit')) return '°f';
+    if (l.includes('kg/m') || l.includes('g/dm') || l.includes('g/l')) return 'kg/m³';
+    if (l.includes('kg/l') || l.includes('g/cm') || l.includes('g/ml') || l.includes('g/cc')) return 'kg/l';
     return l;
   };
 
@@ -377,6 +386,26 @@ export function convertUnits(val: number, fromUnit: string, toUnit: string): { v
   // % to PPM
   if (fUnit === '%peso' && tUnit === 'ppm') {
     return { value: val * 10000.0, unit: toUnit };
+  }
+
+  // Celsius to Fahrenheit
+  if (fUnit === '°c' && tUnit === '°f') {
+    return { value: (val * 9) / 5 + 32, unit: toUnit };
+  }
+
+  // Fahrenheit to Celsius
+  if (fUnit === '°f' && tUnit === '°c') {
+    return { value: ((val - 32) * 5) / 9, unit: toUnit };
+  }
+
+  // Density conversions: kg/m³ (g/l) to kg/l
+  if (fUnit === 'kg/m³' && tUnit === 'kg/l') {
+    return { value: val / 1000.0, unit: toUnit };
+  }
+
+  // Density conversions: kg/l to kg/m³ (g/l)
+  if (fUnit === 'kg/l' && tUnit === 'kg/m³') {
+    return { value: val * 1000.0, unit: toUnit };
   }
 
   return { value: val, unit: fromUnit };
@@ -714,8 +743,6 @@ export interface ParsedSpecLimit {
 export function parseSpecificationPdfText(text: string, daxxSpecs: SpecItem[]): Record<string, ParsedSpecLimit> {
   const results: Record<string, ParsedSpecLimit> = {};
   const lines = text.split('\n').map(line => normalizeDashes(line.trim())).filter(line => line.length > 0);
-  
-  const methodRegex = /\s+\b(?:dax|dowm|astm|din|iso|sms|uop|en|aocs|gc|hplc|method|méthode)\b\s+[a-z0-9\-\/._+]+(?:\s+[a-z0-9\-\/._+]+)*\s*$/i;
 
   for (const spec of daxxSpecs) {
     let bestLine = '';
@@ -771,6 +798,8 @@ export function parseSpecificationPdfText(text: string, daxxSpecs: SpecItem[]): 
 
     if (bestLine && bestScore > -50) {
       let cleanLine = bestLine.replace(/^\d+\s+/, '');
+      cleanLine = cleanLine.replace(globalMethodRegex, '');
+      cleanLine = cleanLine.replace(methodNumbersRegex, '');
       cleanLine = cleanLine.replace(methodRegex, '').trim();
 
       // Find the matched synonym again for this best line
@@ -795,13 +824,14 @@ export function parseSpecificationPdfText(text: string, daxxSpecs: SpecItem[]): 
 
       // 1. Detect Range
       const rangeRegex = /(\d+(?:[.,]\d+)?)\s*[-–—]\s*(\d+(?:[.,]\d+)?)/;
-      const rangeMatch = textToAnalyze.match(rangeRegex);
+      const spaceRangeRegex = /\b([\d.,]+)\s+([\d.,]+)\s*$/;
+      const rangeMatch = textToAnalyze.match(rangeRegex) || textToAnalyze.match(spaceRangeRegex);
 
       if (rangeMatch) {
         results[spec.id] = {
           name: spec.name,
           rawValue: bestLine,
-          value: `${rangeMatch[1]} - ${rangeMatch[2]}`,
+          value: `${rangeMatch[1].replace(',', '.')} - ${rangeMatch[2].replace(',', '.')}`,
           unit: spec.unit || '',
           limitType: 'range'
         };

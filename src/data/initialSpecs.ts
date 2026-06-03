@@ -7042,7 +7042,12 @@ export const INITIAL_PRODUCTS: ProductSpec[] = [
       "PETROSOL D 40",
       "PETROSOL D40",
       "PETROSOL D 40_ESP",
-      "32241_010_PETROSOL D 40_ESP"
+      "32241_010_PETROSOL D 40_ESP",
+      "SPIRDANE D 40",
+      "SPIRDANE D40",
+      "Spirdane D 40",
+      "SPIRDANE",
+      "Spirdane"
     ],
     "name": "D40",
     "category": "Others",
@@ -7074,7 +7079,9 @@ export const INITIAL_PRODUCTS: ProductSpec[] = [
           "aromatics",
           "contenido de aromáticos",
           "aromaticos",
-          "contenido de aromaticos"
+          "contenido de aromaticos",
+          "aromatic content",
+          "aromatics content"
         ]
       },
       {
@@ -7099,7 +7106,10 @@ export const INITIAL_PRODUCTS: ProductSpec[] = [
           "flash point pmcc",
           "flash point pensky martens",
           "infam. p/m (proc.a)",
-          "infam"
+          "infam",
+          "pensky-martens flash point",
+          "pensky martens flash point",
+          "pensky-martens"
         ]
       },
       {
@@ -7116,58 +7126,10 @@ export const INITIAL_PRODUCTS: ProductSpec[] = [
         ]
       },
       {
-        "id": "d40-sulfur",
-        "name": "Sulfur",
-        "unit": "ppm",
-        "value": 2,
-        "limitType": "max",
-        "synonyms": [
-          "sulfur",
-          "azufre",
-          "sulfur content"
-        ]
-      },
-      {
-        "id": "d40-bromine-index",
-        "name": "Bromine Index",
-        "unit": "mg Br/100g",
-        "value": 30,
-        "limitType": "max",
-        "synonyms": [
-          "bromine index",
-          "indice de bromo",
-          "brome index"
-        ]
-      },
-      {
-        "id": "d40-water-eu",
-        "name": "Water (Karl Fischer)",
-        "unit": "ppm",
-        "value": 100,
-        "limitType": "max",
-        "synonyms": [
-          "agua karl fischer",
-          "water (karl fischer)",
-          "water (kf)",
-          "agua (kf)",
-          "karl fischer water"
-        ]
-      },
-      {
-        "id": "d40-api-gravity-70f",
-        "name": "API Gravity @70F",
-        "unit": "Visual",
-        "value": "50.0 - 55.5",
-        "limitType": "text",
-        "synonyms": [
-          "api gravity @70f"
-        ]
-      },
-      {
         "id": "d40-color-saybolt",
         "name": "Color (Saybolt)",
         "unit": "Saybolt",
-        "value": 28.0,
+        "value": 30.0,
         "limitType": "min",
         "synonyms": [
           "color (saybolt)",
@@ -7177,229 +7139,35 @@ export const INITIAL_PRODUCTS: ProductSpec[] = [
         ]
       },
       {
-        "id": "d40-flash-tcc-f",
-        "name": "Flash, TCC (°F)",
-        "unit": "°F",
-        "value": 100.0,
-        "limitType": "min",
-        "synonyms": [
-          "flash, tcc",
-          "flash point tcc",
-          "flash point tcc f",
-          "flash tcc f"
-        ]
-      },
-      {
-        "id": "d40-flash-tcc-c",
-        "name": "Flash, TCC (°C)",
-        "unit": "°C",
-        "value": 38.0,
-        "limitType": "min",
-        "synonyms": [
-          "flash, tcc",
-          "flash point tcc",
-          "flash point tcc c",
-          "flash tcc c"
-        ]
-      },
-      {
         "id": "d40-distillation-ibp",
         "name": "Distillation, IBP",
-        "unit": "°F",
-        "value": 300.0,
+        "unit": "°C",
+        "value": 150.0,
         "limitType": "min",
         "synonyms": [
-          "distillation, ibp"
+          "distillation, ibp",
+          "destilac. princ.",
+          "destilac. princ",
+          "destilación inicial",
+          "initial boiling point",
+          "ibp"
         ]
       },
       {
-        "id": "d40-distillation-5",
-        "name": "Distillation, 5%",
-        "unit": "Visual",
-        "value": "°F",
-        "limitType": "text",
-        "synonyms": [
-          "distillation, 5%"
-        ]
-      },
-      {
-        "id": "d40-distillation-10",
-        "name": "Distillation, 10%",
-        "unit": "Visual",
-        "value": "°F",
-        "limitType": "text",
-        "synonyms": [
-          "distillation, 10%"
-        ]
-      },
-      {
-        "id": "d40-distillation-20",
-        "name": "Distillation, 20%",
-        "unit": "Visual",
-        "value": "°F",
-        "limitType": "text",
-        "synonyms": [
-          "distillation, 20%"
-        ]
-      },
-      {
-        "id": "d40-distillation-30",
-        "name": "Distillation, 30%",
-        "unit": "Visual",
-        "value": "°F",
-        "limitType": "text",
-        "synonyms": [
-          "distillation, 30%"
-        ]
-      },
-      {
-        "id": "d40-distillation-40",
-        "name": "Distillation, 40%",
-        "unit": "Visual",
-        "value": "°F",
-        "limitType": "text",
-        "synonyms": [
-          "distillation, 40%"
-        ]
-      },
-      {
-        "id": "d40-distillation-50",
-        "name": "Distillation, 50%",
-        "unit": "Visual",
-        "value": "°F",
-        "limitType": "text",
-        "synonyms": [
-          "distillation, 50%"
-        ]
-      },
-      {
-        "id": "d40-distillation-60",
-        "name": "Distillation, 60%",
-        "unit": "Visual",
-        "value": "°F",
-        "limitType": "text",
-        "synonyms": [
-          "distillation, 60%"
-        ]
-      },
-      {
-        "id": "d40-distillation-70",
-        "name": "Distillation, 70%",
-        "unit": "Visual",
-        "value": "°F",
-        "limitType": "text",
-        "synonyms": [
-          "distillation, 70%"
-        ]
-      },
-      {
-        "id": "d40-distillation-90",
-        "name": "Distillation, 90%",
-        "unit": "Visual",
-        "value": "°F",
-        "limitType": "text",
-        "synonyms": [
-          "distillation, 90%"
-        ]
-      },
-      {
-        "id": "d40-distillation-95",
-        "name": "Distillation, 95%",
-        "unit": "Visual",
-        "value": "°F",
-        "limitType": "text",
-        "synonyms": [
-          "distillation, 95%"
-        ]
-      },
-      {
-        "id": "d40-water",
-        "name": "Water",
-        "unit": "ppm",
-        "value": "380 - 415",
-        "limitType": "text",
-        "synonyms": [
-          "water",
-          "water content",
-          "moisture",
-          "moisture content",
-          "water content (kf)",
-          "water (kf)",
-          "h2o",
-          "h 2o",
-          "karl fischer",
-          "kf",
-          "kf water",
-          "water by kf",
-          "water determination",
-          "humidity",
-          "water determination (kf)",
-          "water content by kf",
-          "w ater",
-          "w ater content",
-          "agua",
-          "humedad",
-          "contenido de agua",
-          "agua (kf)",
-          "determinación de agua",
-          "humedad por kf",
-          "eau",
-          "teneur en eau",
-          "humidité"
-        ]
-      },
-      {
-        "id": "d40-aromatic",
-        "name": "Aromatic",
-        "unit": "wt%",
-        "value": 500.0,
+        "id": "d40-distillation-fbp",
+        "name": "Distillation, FBP",
+        "unit": "°C",
+        "value": 205.0,
         "limitType": "max",
         "synonyms": [
-          "aromatic"
-        ]
-      },
-      {
-        "id": "d40-refractive-index-25c",
-        "name": "Refractive Index @25C",
-        "unit": "%peso",
-        "value": 1.0,
-        "limitType": "max",
-        "synonyms": [
-          "refractive index @25c",
-          "refractive index a25c",
-          "refractive index at25c",
-          "refraction index @25c",
-          "refraction index a25c",
-          "refraction index at25c",
-          "ri @25c",
-          "ri a25c",
-          "ri at25c",
-          "n20d @25c",
-          "n20d a25c",
-          "n20d at25c",
-          "nd20 @25c",
-          "nd20 a25c",
-          "nd20 at25c",
-          "refractive index 20°C @25c",
-          "refractive index 20°C @25c",
-          "refractive index 20°C a25c",
-          "refractive index 20°C at25c",
-          "refractive index @25c @25c",
-          "refractive index a25c a25c",
-          "refractive index at25c at25c",
-          "refractive index, @20°c @25c",
-          "refractive index, @20c @25c",
-          "refractive index, a20°c a25c",
-          "refractive index, at20°c at25c",
-          "índice de refracción @25c",
-          "índice de refracción a25c",
-          "índice de refracción at25c",
-          "índice de refracción @25c",
-          "índice de refracción a25c",
-          "índice de refracción at25c",
-          "indice de réfraction @25c",
-          "indice de réfraction a25c",
-          "indice de réfraction at25c"
+          "distilac. final",
+          "destilac. final",
+          "distillation, fbp",
+          "final boiling point",
+          "distillation fbp",
+          "destilación final",
+          "dry point",
+          "fbp"
         ]
       }
     ]
@@ -22720,7 +22488,7 @@ export const INITIAL_PRODUCTS: ProductSpec[] = [
         "name": "Purity",
         "unit": "wt%",
         "value": 99.0,
-        "limitType": "max",
+        "limitType": "min",
         "synonyms": [
           "purity",
           "purety",
