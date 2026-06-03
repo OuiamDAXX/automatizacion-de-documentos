@@ -26585,6 +26585,12 @@ export const INITIAL_PRODUCTS: ProductSpec[] = [
   },
   {
     "id": "triethylene-glycol-teg",
+    "synonyms": [
+      "TEG High color",
+      "TEG High Color",
+      "TEG",
+      "Triethylene Glycol"
+    ],
     "name": "Triethylene Glycol (TEG)",
     "category": "Glycols",
     "specs": [

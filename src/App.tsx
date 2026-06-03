@@ -8,10 +8,10 @@ import { Layers, Database, Link2, ShieldAlert, Award, ChevronRight, Menu, X, Arr
 
 export default function App() {
   const [products, setProducts] = useState<ProductSpec[]>(() => {
-    const migrated = localStorage.getItem('daxx_specs_v7_cleaned');
+    const migrated = localStorage.getItem('daxx_specs_v8_cleaned');
     if (!migrated) {
       localStorage.removeItem('daxx_chemical_specs_v2');
-      localStorage.setItem('daxx_specs_v7_cleaned', 'true');
+      localStorage.setItem('daxx_specs_v8_cleaned', 'true');
       return INITIAL_PRODUCTS;
     }
     const saved = localStorage.getItem('daxx_chemical_specs_v2');
