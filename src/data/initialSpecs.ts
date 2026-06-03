@@ -7037,6 +7037,13 @@ export const INITIAL_PRODUCTS: ProductSpec[] = [
   },
   {
     "id": "d40",
+    "synonyms": [
+      "Petrosol D 40",
+      "PETROSOL D 40",
+      "PETROSOL D40",
+      "PETROSOL D 40_ESP",
+      "32241_010_PETROSOL D 40_ESP"
+    ],
     "name": "D40",
     "category": "Others",
     "specs": [
