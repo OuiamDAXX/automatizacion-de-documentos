@@ -137,7 +137,7 @@ export function matchSynonymInLine(line: string, synonym: string): boolean {
  * Parses numeric value from a line of text, identifying the supplier's result vs spec limits.
  */
 export function extractNumericValueFromLine(line: string, defaultUnit: string): { value: number; unit: string } | null {
-  const regex = /([\d.,]+)\s*(%|ppm|pt-co|g\/cm3)?/gi;
+  const regex = /\b([\d.,]+)\s*(%|ppm|pt-co|g\/cm3)?\b/gi;
   const matches: { value: number; unit: string; startIndex: number; endIndex: number }[] = [];
   
   let match;
@@ -222,6 +222,8 @@ export function parseSupplierCoaText(text: string, daxxSpecs: SpecItem[]): Recor
 
   // Method pattern to strip from the end of the line
   const methodRegex = /\s+\b(?:dax|dowm|astm|din|iso|sms|uop|en|aocs|gc|hplc|method|méthode)\b\s+[a-z0-9\-\/._+]+(?:\s+[a-z0-9\-\/._+]+)*\s*$/i;
+  const globalMethodRegex = /\b(?:astm(?:\s*d)?|uop|din|iso|en|gc|hplc|dowm|sms|aocs)\b(?:\s*\d+[a-z0-9\-\/._+]*)?/gi;
+  const methodNumbersRegex = /\b(?:5453|2710|6045|495|481|86|93|4052)\b|(?<=\d)(?:5453|2710|6045|4052)\b/gi;
 
   for (const spec of daxxSpecs) {
     let bestLine = '';
@@ -286,6 +288,8 @@ export function parseSupplierCoaText(text: string, daxxSpecs: SpecItem[]): Recor
 
     if (bestLine && bestScore > -50) {
       let cleanLine = bestLine.replace(/^\d+\s+/, '');
+      cleanLine = cleanLine.replace(globalMethodRegex, '');
+      cleanLine = cleanLine.replace(methodNumbersRegex, '');
       cleanLine = cleanLine.replace(methodRegex, '').trim();
 
       // Find the matched synonym again for this best line to slice the value part
@@ -308,13 +312,14 @@ export function parseSupplierCoaText(text: string, daxxSpecs: SpecItem[]): Recor
       const textToAnalyze = valPart || cleanLine;
 
       if (spec.limitType === 'text' || spec.limitType === 'range') {
-        const rangeRegex = /^([\d.,]+)\s*[-–—]\s*([\d.,\-]+)$/;
+        const rangeRegex = /([\d.,]+)\s*[-–—]\s*([\d.,\-]+)/;
         const rangeMatch = textToAnalyze.match(rangeRegex);
         if (rangeMatch) {
+          const rangeStr = `${rangeMatch[1].replace(',', '.')} - ${rangeMatch[2].replace(',', '.')}`;
           results[spec.id] = {
             name: spec.name,
             rawValue: bestLine,
-            value: textToAnalyze,
+            value: rangeStr,
             unit: spec.unit || '',
             type: 'text'
           };
@@ -397,7 +402,7 @@ export function compareSpecifications(daxxSpecs: SpecItem[], supplierSpecs: Reco
 
     if (daxxSpec.limitType === 'range') {
       const sValStr = String(supplierData.value).trim();
-      const rangeRegex = /^([\d.,]+)\s*[-–—]\s*([\d.,\-]+)$/;
+      const rangeRegex = /([\d.,]+)\s*[-–—]\s*([\d.,\-]+)/;
 
       const daxxRangeMatch = String(daxxSpec.value).trim().replace(/–/g, '-').match(rangeRegex);
       const supplierRangeMatch = sValStr.replace(/–/g, '-').match(rangeRegex);
