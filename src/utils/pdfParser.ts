@@ -161,9 +161,10 @@ export function extractNumericValueFromLine(line: string, defaultUnit: string): 
     let unit = matches[0].unit;
     if (!unit) {
       if (/\bppm\b/i.test(line)) unit = 'ppm';
-      else if (/%/i.test(line)) unit = '%';
+      else if (/%/i.test(line)) unit = 'wt%';
       else unit = defaultUnit;
     }
+    if (unit === '%') unit = 'wt%';
     return { value: matches[0].value, unit };
   }
 
@@ -204,9 +205,10 @@ export function extractNumericValueFromLine(line: string, defaultUnit: string): 
   let unit = best.unit;
   if (!unit) {
     if (/\bppm\b/i.test(line)) unit = 'ppm';
-    else if (/%/i.test(line)) unit = '%';
+    else if (/%/i.test(line)) unit = 'wt%';
     else unit = defaultUnit;
   }
+  if (unit === '%') unit = 'wt%';
 
   return { value: best.value, unit };
 }
