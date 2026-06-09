@@ -25,3 +25,6 @@ dist-ssr
 
 # Scratch files
 scratch/
+
+# Large Oilchem Data files
+oilchem_all_data.csv
